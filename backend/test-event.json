@@ -1,0 +1,8 @@
+{
+  "requestContext": {
+    "http": {
+      "method": "POST"
+    }
+  },
+  "body": "{\"purpose\":\"自己紹介用の画面\",\"items\":\"名前、生年月日\",\"designRequest\":\"モダンで使いやすいデザイン\"}"
+}

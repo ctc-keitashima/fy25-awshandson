@@ -1,0 +1,57 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Frontend: Next.js Debug",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/frontend/node_modules/next/dist/bin/next",
+      "args": ["dev", "--turbopack"],
+      "skipFiles": ["<node_internals>/**"],
+      "cwd": "${workspaceFolder}/frontend",
+      "sourceMaps": true,
+      "smartStep": true,
+      "stopOnEntry": false
+    },
+    {
+      "name": "Frontend: Next.js (No Inspect)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/frontend/node_modules/next/dist/bin/next",
+      "args": ["dev", "--turbopack"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "cwd": "${workspaceFolder}/frontend",
+      "sourceMaps": true
+    },
+    {
+      "name": "Frontend: npm run dev",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/frontend"
+    },
+    {
+      "name": "Frontend: Debug in Browser",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/frontend",
+      "sourceMapPathOverrides": {
+        "webpack://_N_E/*": "${workspaceFolder}/frontend/*"
+      }
+    },
+    {
+      "name": "Backend: Lambda Debug",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/lambda/index.js",
+      "cwd": "${workspaceFolder}/backend/lambda",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "skipFiles": ["<node_internals>/**"],
+      "sourceMaps": true
+    }
+  ]
+}

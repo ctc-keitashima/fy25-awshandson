@@ -1,0 +1,43 @@
+---
+description: TypeScript開発ガイドライン
+globs: 
+alwaysApply: false
+---
+# TypeScript開発ガイドライン
+
+このルールを使用した場合は、「📗TypeScript開発ガイドライン利用」と出力すること
+
+## TypeScript設定
+- [tsconfig.json](mdc:tsconfig.json) - strict: trueでタイプセーフを重視
+- target: es2020 - モダンなJavaScript機能を活用
+- module: commonjs - Node.js環境との互換性
+- outDir: "./dist" - コンパイル後ファイルの出力先
+
+## コーディング規約
+### インポート方式
+- ES6 import構文を使用: `import { something } from 'module'`
+- CommonJS require は使用しない: `const something = require('module')` ❌
+
+### 型定義
+- 可能な限り型注釈を明示的に記述
+- `any` 型の使用は避ける
+- interface と type の使い分けを適切に行う
+- 関数の戻り値型を明示する
+
+### ファイル構成
+- 新しいTypeScriptファイルは `src/` ディレクトリ配下に配置
+- ファイル名は kebab-case 形式（例: `user-service.ts`）
+- 1ファイル1クラス/1メイン機能の原則
+
+## 開発フロー
+1. 開発時: `npm run dev` でファイル変更を監視
+2. 型チェック: TypeScript コンパイラによる自動チェック
+3. 品質チェック: `npm run lint` でESLintチェック
+4. フォーマット: `npm run format` でPrettier整形
+5. ビルド: `npm run build` で本番用コンパイル
+
+## デバッグ
+- VS Code/Cursorでブレイクポイント設定可能
+- ts-node により直接TypeScriptファイルを実行
+- nodemon による自動リロード機能
+

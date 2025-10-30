@@ -1,0 +1,45 @@
+---
+description: 
+globs: infra/*,scripts/*
+alwaysApply: false
+---
+# Node.js プロジェクト作成規約
+
+このルールを使用した場合は、「📖Node.jsプロジェクト作成規約利用」と出力すること
+
+nodeプロジェクトを作成する際は、以下のとおりにすること。
+
+## 基本要件
+* TypeScriptを使用する（[tsconfig.json](mdc:tsconfig.json)で設定）
+* LintとPrettierに対応する（タブは半角スペースとする）
+* 保存時自動整形を有効にする
+* `npm run dev` で実行できるようにする
+* デバッグ実行時にブレイクポイントで止めれるようにする
+* importの仕方は `import *** from ***` の形式に対応する（`require` ではない）
+* .gitignore ファイルを作り、ここで作成したプロジェクトにマッチした設定を行う
+
+## プロジェクト・ディレクトリ構造
+* `src/` - TypeScriptソースコード（エントリーポイント: [index.ts](mdc:src/index.ts)）
+* `dist/` - コンパイル後のJavaScriptファイル（自動生成）
+* `node_modules/` - 依存パッケージ（自動生成）
+
+## 主要設定ファイル
+* [package.json](mdc:package.json) - プロジェクト設定と依存関係・スクリプトの管理
+* [tsconfig.json](mdc:tsconfig.json) - TypeScriptコンパイル設定
+* メインエントリーポイント: [src/index.ts](mdc:src/index.ts)
+
+## 必須スクリプト（[package.json](mdc:package.json)に定義）
+* `dev` - 開発環境での実行（nodemon + ts-node）
+* `build` - TypeScriptコンパイル
+* `start` - 本番環境での実行
+* `lint` - ESLintによる静的解析と修正
+* `format` - Prettierによるコード整形
+
+## 開発ツール・コード品質
+* ESLint - TypeScript用設定でコード品質を保持
+* Prettier - 統一されたコードフォーマット（半角スペースを使用、タブは使用しない）
+* nodemon - ファイル変更時の自動リロード
+* ts-node - TypeScriptの直接実行
+
+
+別途、.cursor\rules\project-structure.mdc も参照すること

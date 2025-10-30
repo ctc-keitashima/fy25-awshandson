@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: AWS SAM template for Bedrock UI Generator
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: nodejs20.x
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        BEDROCK_MODEL_ID: arn:aws:bedrock:us-east-1:677276090092:inference-profile/us.anthropic.claude-3-5-haiku-20241022-v1:0
+        BEDROCK_REGION: us-east-1
+
+Resources:
+  BedrockUIGeneratorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: bedrock-ui-generator
+      Handler: index.handler
+      CodeUri: lambda/
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:InvokeModelWithResponseStream
+              Resource:
+                - arn:aws:bedrock:*::foundation-model/*
+                - arn:aws:bedrock:*:*:inference-profile/*
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        EntryPoints:
+          - index.ts
+
+  BedrockUIGeneratorFunctionUrl:
+    Type: AWS::Lambda::Url
+    Properties:
+      AuthType: NONE
+      Cors:
+        AllowCredentials: false
+        AllowHeaders:
+          - content-type
+          - Content-Type
+          - accept
+          - x-amz-date
+          - authorization
+          - x-api-key
+          - x-amz-security-token
+        AllowMethods:
+          - POST
+        AllowOrigins:
+          - "*"
+      TargetFunctionArn: !GetAtt BedrockUIGeneratorFunction.Arn
+
+  FunctionUrlPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref BedrockUIGeneratorFunction
+      Action: lambda:InvokeFunctionUrl
+      Principal: "*"
+      FunctionUrlAuthType: NONE
+
+Outputs:
+  BedrockUIGeneratorFunctionUrl:
+    Description: Function URL for Bedrock UI Generator
+    Value: !GetAtt BedrockUIGeneratorFunctionUrl.FunctionUrl
+    Export:
+      Name: BedrockUIGeneratorFunctionUrl

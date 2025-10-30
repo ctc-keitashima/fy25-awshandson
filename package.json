@@ -1,0 +1,13 @@
+{
+  "name": "fy25-awshandson-sandbox",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "deploy:frontend": "cd frontend && npm run build && aws s3 sync build/ s3://your-bucket",
+    "deploy:backend": "cd backend && sam deploy"
+  }
+}

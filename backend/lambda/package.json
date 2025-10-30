@@ -1,0 +1,36 @@
+{
+  "name": "bedrock-ui-generator-lambda",
+  "version": "1.0.0",
+  "description": "Lambda function for generating UI components using Amazon Bedrock",
+  "main": "lambda/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "local": "node dist/index.js",
+    "dev": "tsc && node dist/index.js",
+    "test": "node test-local.js",
+    "test:build": "tsc && node test-local.js",
+    "lint": "eslint . --ext .ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.445.0",
+    "dotenv": "^17.2.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "esbuild": "^0.19.12",
+    "eslint": "^8.0.0",
+    "typescript": "^5.3.0"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "bedrock",
+    "react",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT"
+}
