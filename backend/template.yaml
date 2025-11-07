@@ -5,7 +5,6 @@ Description: AWS SAM template for Bedrock UI Generator
 Parameters:
   MyName:
     Type: String
-    Default: "---"
     Description: Developer Name
 
 Globals:
@@ -17,9 +16,9 @@ Globals:
       - x86_64
     Environment:
       Variables:
-        BEDROCK_MODEL_ID: ""
-        BEDROCK_REGION: ""
-        PASS_PHRASE: ""
+        BEDROCK_MODEL_ID: "qwen.qwen3-coder-480b-a35b-v1:0"
+        BEDROCK_REGION: "us-east-2"
+        PASS_PHRASE: !Ref MyName
 
 Resources:
   BedrockUIGeneratorFunctionRole:

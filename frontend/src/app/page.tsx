@@ -58,6 +58,7 @@ export default function Home() {
           purpose,
           items,
           designRequest,
+          passphrase: process.env.LAMBDA_PASS_PHRASE,
         }),
       });
 
