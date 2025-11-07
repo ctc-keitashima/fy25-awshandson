@@ -14,6 +14,7 @@ interface RequestBody {
   purpose: string;
   items: string;
   designRequest: string;
+  passphrase?: string;
 }
 
 interface ResponseBody {
@@ -63,9 +64,21 @@ export const handler = async (event: LambdaEvent): Promise<LambdaResponse> => {
     }
 
     // リクエストボディのパース
-    const { purpose, items, designRequest }: RequestBody = JSON.parse(
-      event.body
-    );
+    const { purpose, items, designRequest, passphrase }: RequestBody =
+      JSON.parse(event.body);
+
+    if (process.env.PASS_PHRASE && passphrase !== process.env.PASS_PHRASE) {
+      return {
+        statusCode: 401,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          error: "Unauthorized",
+          message: "not matched passphrase",
+        }),
+      };
+    }
 
     // Bedrock API呼び出し
     const prompt = createPrompt(purpose, items, designRequest);
@@ -191,8 +204,7 @@ function AppWindow() {
 
 // Bedrock API呼び出し
 async function invokeBedrock(prompt: string): Promise<any> {
-  const modelId =
-    process.env.BEDROCK_MODEL_ID || "anthropic.claude-3-haiku-20240307-v1:0";
+  const modelId = process.env.BEDROCK_MODEL_ID;
 
   console.log("Using Bedrock model:", modelId); // デバッグログ
 

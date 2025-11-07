@@ -46,6 +46,20 @@ backend/
 
 ## 実行手順
 
+### 0. 事前準備
+`samconfig.toml`ファイルを作成してください。
+
+```bash
+cp samconfig.toml.sample samconfig.toml
+```
+
+`samconfig.toml`ファイルを編集してください。
+```toml
+stack_name = "fy25-handson-yamada"
+s3_prefix = "fy25-handson-yamada"
+parameter_overrides = "MyName=yamada"
+```
+
 ### 1. ローカルテスト（推奨）
 
 #### Lambda関数単体のテスト
@@ -105,24 +119,15 @@ sam deploy --parameter-overrides BedrockModelId=anthropic.claude-3-sonnet-202402
 sam deploy --parameter-overrides BedrockModelId=anthropic.claude-3-haiku-20240307-v1:0 AwsRegion=us-west-2
 ```
 
-#### samconfig.tomlファイル使用
-```toml
-# samconfig.toml
-version = 0.1
-[default]
-[default.deploy]
-[default.deploy.parameters]
-parameter_overrides = "BedrockModelId=anthropic.claude-3-haiku-20240307-v1:0"
-```
-
 ## 設定パラメータ
 
 ### 環境変数
 
 | 変数名 | 説明 | デフォルト値 |
 |--------|------|-------------|
-| `BEDROCK_MODEL_ID` | 使用するBedrockモデルID | `anthropic.claude-3-sonnet-20240229-v1:0` |
-| `AWS_REGION` | AWSリージョン | `us-east-1` |
+| `BEDROCK_MODEL_ID` | 使用するBedrockモデルID | 
+| `AWS_REGION` | AWSリージョン |
+| `PASS_PHRASE` | パスフレーズ。こちらを設定しておくと、リクエストボディに正しい passphrase が含まれている場合のみ関数が動作する。 |
 
 
 ## トラブルシューティング

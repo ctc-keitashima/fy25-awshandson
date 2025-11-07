@@ -2,35 +2,68 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: AWS SAM template for Bedrock UI Generator
 
+Parameters:
+  MyName:
+    Type: String
+    Default: "---"
+    Description: Developer Name
+
 Globals:
   Function:
-    Timeout: 30
+    Timeout: 180
     MemorySize: 512
     Runtime: nodejs20.x
     Architectures:
       - x86_64
     Environment:
       Variables:
-        BEDROCK_MODEL_ID: arn:aws:bedrock:us-east-1:677276090092:inference-profile/us.anthropic.claude-3-5-haiku-20241022-v1:0
-        BEDROCK_REGION: us-east-1
+        BEDROCK_MODEL_ID: "qwen.qwen3-coder-30b-a3b-v1:0"
+        BEDROCK_REGION: "us-east-2"
+        PASS_PHRASE: ""
 
 Resources:
+  BedrockUIGeneratorFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "fy25-handson-${MyName}-BedrockRole"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonBedrockMarketplaceAccess
+      Policies:
+        - PolicyName: !Sub "fy25-handson-${MyName}-BedrockAccess"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - bedrock:InvokeModel
+                  - bedrock:InvokeModelWithResponseStream
+                Resource:
+                  - arn:aws:bedrock:*::foundation-model/*
+                  - arn:aws:bedrock:*:*:inference-profile/*
+        - PolicyName: !Sub "fy25-handson-${MyName}-MarketplaceAccess"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - aws-marketplace:*
+                Resource: "*"
+
   BedrockUIGeneratorFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: bedrock-ui-generator
+      FunctionName: !Sub "fy25-handson-${MyName}-BedrockUIGeneratorFunction"
+      Role: !GetAtt BedrockUIGeneratorFunctionRole.Arn
       Handler: index.handler
       CodeUri: lambda/
-      Policies:
-        - Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Action:
-                - bedrock:InvokeModel
-                - bedrock:InvokeModelWithResponseStream
-              Resource:
-                - arn:aws:bedrock:*::foundation-model/*
-                - arn:aws:bedrock:*:*:inference-profile/*
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -72,4 +105,4 @@ Outputs:
     Description: Function URL for Bedrock UI Generator
     Value: !GetAtt BedrockUIGeneratorFunctionUrl.FunctionUrl
     Export:
-      Name: BedrockUIGeneratorFunctionUrl
+      Name: !Sub "fy25-handson-${MyName}-BedrockUIGeneratorFunctionUrl"
