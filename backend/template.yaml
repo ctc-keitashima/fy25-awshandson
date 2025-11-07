@@ -17,8 +17,8 @@ Globals:
       - x86_64
     Environment:
       Variables:
-        BEDROCK_MODEL_ID: "qwen.qwen3-coder-30b-a3b-v1:0"
-        BEDROCK_REGION: "us-east-2"
+        BEDROCK_MODEL_ID: ""
+        BEDROCK_REGION: ""
         PASS_PHRASE: ""
 
 Resources:
